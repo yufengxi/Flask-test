@@ -1,51 +1,30 @@
-from flask import Flask, url_for, render_template, flash, redirect
-from app.config import Config
+from flask import render_template, flash, redirect, url_for
+from app import app
 from app.forms import LoginForm
-# 包含多个数据库软件，ORM，允许应用多个类
-from flask_sqlalchemy import SQLAlchemy
-# 数据库迁移
-from flask_migrate import Migrate
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-#能够将函数绑定到对应的URL上
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'nickname' : 'Jack'}
+    user = {'username': 'Miguel'}
     posts = [
-            {
-                    'author': {'nickname' : 'John'},
-                    'body' : 'Beautiful day!'
-            },
-            {
-                    'author' : { 'nickname' : 'Tim'},
-                    'body' : 'Go, Tencent !'
-            }
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
     ]
-    return render_template("index.html",
-        title = 'Home',
-        user = user,
-        posts = posts)
+    return render_template('index.html', title='Home', user=user, posts=posts)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    # 执行检验工作，通过后返回True
     if form.validate_on_submit():
-        # flash会存储消息
-        flash('Login requested for user {}, remeber_me = {}'.format(
-			form.username.data, form.remeber_me.data
-		))
-        # 重定向
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
         return redirect(url_for('index'))
-    return render_template('login.html', 
-                title = 'Sign In',
-                form = form)
-
-'''if __name__ == '__main__':
-        app.run(debug=True)
-'''
+    return render_template('login.html',  title='Sign In', form=form)
