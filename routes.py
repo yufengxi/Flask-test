@@ -1,6 +1,6 @@
 from flask import Flask, url_for, render_template, flash, redirect
-from config import Config
-from forms import LoginForm
+from app.config import Config
+from app.forms import LoginForm
 # 包含多个数据库软件，ORM，允许应用多个类
 from flask_sqlalchemy import SQLAlchemy
 # 数据库迁移
@@ -46,5 +46,6 @@ def login():
                 title = 'Sign In',
                 form = form)
 
-if __name__ == '__main__':
+'''if __name__ == '__main__':
         app.run(debug=True)
+'''
