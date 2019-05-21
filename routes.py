@@ -1,9 +1,15 @@
 from flask import Flask, url_for, render_template, flash, redirect
 from config import Config
 from forms import LoginForm
+# 包含多个数据库软件，ORM，允许应用多个类
+from flask_sqlalchemy import SQLAlchemy
+# 数据库迁移
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 #能够将函数绑定到对应的URL上
 @app.route('/')
@@ -16,8 +22,8 @@ def index():
                     'body' : 'Beautiful day!'
             },
             {
-                    'author' : { 'nickname' : 'Fingal'},
-                    'body' : 'The man in UCB'
+                    'author' : { 'nickname' : 'Tim'},
+                    'body' : 'Go, Tencent !'
             }
     ]
     return render_template("index.html",
